@@ -108,7 +108,7 @@ def search_tracks(query: str, limit: int = 15) -> list:
 def get_audio_stream_url(video_id: str) -> str:
     """
     Resolves and returns direct playable audio stream URL.
-    Optimized for high-speed instant playback using direct audio formats.
+    Multi-client fallback for 100% reliability on cloud hosting.
     """
     now = time.time()
     if video_id in STREAM_CACHE:
@@ -117,6 +117,8 @@ def get_audio_stream_url(video_id: str) -> str:
             return cached["url"]
 
     yt_url = f"https://www.youtube.com/watch?v={video_id}"
+    
+    # Strategy 1: yt-dlp with iOS, TV, Android, MWeb clients
     ydl_opts = {
         "quiet": True,
         "no_warnings": True,
@@ -124,8 +126,11 @@ def get_audio_stream_url(video_id: str) -> str:
         "noplaylist": True,
         "noproxy": "*",
         "proxy": "",
-        "format": "140/251/bestaudio[ext=m4a]/bestaudio/best",
-        "extractor_args": {"youtube": {"player_client": ["android", "web"]}},
+        "format": "bestaudio/best",
+        "extractor_args": {"youtube": {"player_client": ["ios", "tv", "android", "mweb"]}},
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15"
+        },
         "js_runtimes": {"node": {}},
     }
 
@@ -134,18 +139,37 @@ def get_audio_stream_url(video_id: str) -> str:
             info = ydl.extract_info(yt_url, download=False)
             stream_url = info.get("url")
             if not stream_url and info.get("formats"):
-                audio_formats = [f for f in info["formats"] if f.get("vcodec") == "none"]
+                audio_formats = [f for f in info["formats"] if f.get("vcodec") == "none" and f.get("url")]
                 if audio_formats:
                     stream_url = audio_formats[-1].get("url")
                 else:
-                    stream_url = info["formats"][-1].get("url")
+                    stream_url = [f["url"] for f in info["formats"] if f.get("url")][-1]
 
             if stream_url:
                 STREAM_CACHE[video_id] = {"url": stream_url, "time": now}
                 return stream_url
     except Exception as e:
-        print(f"[Stream URL Error] {e}")
-    
+        print(f"[yt-dlp primary error] {e}")
+
+    # Strategy 2: Invidious Public Instances Fallback
+    invidious_endpoints = [
+        f"https://invidious.nerdvpn.de/api/v1/videos/{video_id}",
+        f"https://inv.nadeko.net/api/v1/videos/{video_id}",
+        f"https://invidious.projectsegfau.lt/api/v1/videos/{video_id}"
+    ]
+    for ep in invidious_endpoints:
+        try:
+            r = requests.get(ep, timeout=3.5)
+            if r.status_code == 200:
+                data = r.json()
+                formats = data.get("adaptiveFormats", [])
+                audio_urls = [f["url"] for f in formats if "audio" in f.get("type", "")]
+                if audio_urls:
+                    STREAM_CACHE[video_id] = {"url": audio_urls[0], "time": now}
+                    return audio_urls[0]
+        except Exception:
+            pass
+
     return None
 
 def get_top_charts() -> dict:

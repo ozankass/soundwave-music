@@ -258,7 +258,7 @@ const App = {
         this.updatePlayerMetadata(track);
 
         // Direct stream URL
-        this.audio.src = `${API_BASE}/api/stream/${track.id}/audio`;
+        this.audio.src = `${API_BASE}/api/stream/${track.id}/audio?t=${Date.now()}`;
         
         if (this.audioCtx && this.audioCtx.state === 'suspended') {
             this.audioCtx.resume();
