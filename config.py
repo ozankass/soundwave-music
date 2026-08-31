@@ -1,11 +1,27 @@
 import os
 from pathlib import Path
 
-# Paths
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
-FRONTEND_DIR = BASE_DIR / "frontend"
-DOWNLOADS_DIR = BASE_DIR / "downloads"
+# Auto-detect root directory whether inside backend/ or at root
+current_dir = Path(__file__).resolve().parent
+if current_dir.name == "backend":
+    BASE_DIR = current_dir.parent
+else:
+    BASE_DIR = current_dir
+
+if (BASE_DIR / "frontend").exists():
+    FRONTEND_DIR = BASE_DIR / "frontend"
+else:
+    FRONTEND_DIR = BASE_DIR
+
+if (BASE_DIR / "data").exists():
+    DATA_DIR = BASE_DIR / "data"
+else:
+    DATA_DIR = BASE_DIR
+
+if (BASE_DIR / "downloads").exists():
+    DOWNLOADS_DIR = BASE_DIR / "downloads"
+else:
+    DOWNLOADS_DIR = BASE_DIR
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 DOWNLOADS_DIR.mkdir(parents=True, exist_ok=True)

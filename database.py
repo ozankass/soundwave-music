@@ -1,8 +1,13 @@
 import json
 import uuid
 import threading
+import os
 from pathlib import Path
-from backend.config import DB_FILE
+
+try:
+    from backend.config import DB_FILE
+except ImportError:
+    from config import DB_FILE
 
 db_lock = threading.Lock()
 

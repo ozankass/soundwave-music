@@ -11,7 +11,11 @@ for proxy_var in ["HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy", "ALL
 
 import yt_dlp
 import static_ffmpeg
-from backend.config import DOWNLOADS_DIR
+
+try:
+    from backend.config import DOWNLOADS_DIR
+except ImportError:
+    from config import DOWNLOADS_DIR
 
 static_ffmpeg.add_paths()
 
