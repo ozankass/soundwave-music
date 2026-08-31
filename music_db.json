@@ -1,0 +1,31 @@
+{
+  "users": {
+    "ozankass": {
+      "id": "36eb71f8-d2b8-49a7-b739-07be16a60492",
+      "username": "ozankass",
+      "password_hash": "43fabba52a39af1f56a32082092b40c15c72f37697a8da3d4262faeb27a4b1ab",
+      "salt": "lyUnnme+rue/kByn2+RmCg=="
+    }
+  },
+  "playlists": {
+    "36eb71f8-d2b8-49a7-b739-07be16a60492": [
+      {
+        "id": "pl_299b28d0",
+        "name": "çalma listem",
+        "tracks": []
+      }
+    ]
+  },
+  "likes": {
+    "36eb71f8-d2b8-49a7-b739-07be16a60492": [
+      {
+        "track_id": "4-6En3bf5TY",
+        "title": "Geri Ver",
+        "artist": "Wegh",
+        "thumbnail": "https://i.ytimg.com/vi/4-6En3bf5TY/hqdefault.jpg",
+        "duration_str": "2:50"
+      }
+    ]
+  },
+  "history": {}
+}

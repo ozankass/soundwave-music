@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundWave Pro - Reklamsız Müzik Dinleme & Radyo Platformu</title>
+    <meta name="description" content="YouTube ve Spotify arşivleriyle reklamsız müzik dinle, canlı radyo yayınlarına bağlan ve tek tıkla MP3 indir.">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M9 18V5l12-2v13'/><circle cx='6' cy='18' r='3'/><circle cx='18' cy='16' r='3'/></svg>">
+</head>
+<body>
+
+    <div class="app-container">
+
+        <!-- 1. Left Navigation Sidebar -->
+        <aside class="sidebar">
+            <a href="/" class="brand-logo">
+                <div class="brand-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                </div>
+                <span>Sound<span style="background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Wave</span></span>
+            </a>
+
+            <div class="nav-section-title">Menü</div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-view="home">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <span>Ana Sayfa</span>
+                </li>
+                <li class="nav-item" data-view="radios">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+                    <span>Canlı Radyolar</span>
+                </li>
+                <li class="nav-item" data-view="likes">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    <span>Beğenilen Şarkılar</span>
+                </li>
+            </ul>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:24px 8px 8px 10px;">
+                <span class="nav-section-title" style="margin:0;">Çalma Listelerim</span>
+                <button onclick="Auth.createPlaylistPrompt()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:18px; font-weight:bold;" title="Yeni Liste Oluştur">+</button>
+            </div>
+            
+            <ul id="sidebar-playlists" class="playlists-list">
+                <!-- Dynamically populated playlists -->
+            </ul>
+        </aside>
+
+        <!-- 2. Main Discovery & Content Area -->
+        <main class="main-content">
+            
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="search-container">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="search-input" class="search-input" placeholder="Şarkı, sanatçı veya albüm ara..." autocomplete="off">
+                </div>
+
+                <div id="user-auth-area" class="user-actions">
+                    <!-- Dynamically populated Login / Profile -->
+                </div>
+            </div>
+
+            <!-- Top Leaderboard Ad Slot -->
+            <div class="ad-banner-top">
+                <span>🔥 <strong>Sponsorlu Reklam:</strong> En sevdiğiniz şarkıları yüksek kalitede dinleyin ve keşfedin.</span>
+                <a href="#" class="btn btn-secondary" style="padding:4px 12px; font-size:11px;">İncele</a>
+            </div>
+
+            <!-- VIEW 1: Home / Discovery -->
+            <section id="view-home" class="view-section active">
+                
+                <!-- Hero Featured Track -->
+                <div class="hero-featured">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&auto=format&fit=crop&q=80" class="hero-thumb" alt="Featured">
+                    <div class="hero-info">
+                        <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:800; color:var(--accent-cyan);">Günün Öne Çıkanı</span>
+                        <h2>Die With A Smile</h2>
+                        <p>Lady Gaga & Bruno Mars • 2026 Global Hit</p>
+                        <button class="btn btn-primary" onclick="App.playTrack({id:'kPa7bsKwL-c', title:'Die With A Smile', artist:'Lady Gaga & Bruno Mars', thumbnail:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&auto=format&fit=crop&q=80', duration_str:'4:11'})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span>Hemen Dinle</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section: Otomatik Günlük & Haftalık Ritimler -->
+                <div class="section-header">
+                    <h3 class="section-title">⚡ Senin İçin Akıllı Ritimler</h3>
+                </div>
+                <div id="smart-mixes-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; margin-bottom:36px;"></div>
+
+                <!-- Section: Türkiye Top Trendler -->
+                <div class="section-header">
+                    <h3 class="section-title">🇹🇷 Türkiye Top Trendler</h3>
+                </div>
+                <div id="grid-turkey-top" class="tracks-grid"></div>
+
+                <!-- Section: Spotify & YouTube Çalma Listeleri -->
+                <div class="section-header">
+                    <h3 class="section-title">🌟 Popüler Çalma Listeleri (Spotify & YouTube)</h3>
+                </div>
+                <div id="featured-playlists-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:18px; margin-bottom:36px;"></div>
+
+                <!-- Section: Global Top 20 -->
+                <div class="section-header">
+                    <h3 class="section-title">🌍 Global Top Listeler</h3>
+                </div>
+                <div id="grid-global-top" class="tracks-grid"></div>
+
+                <!-- Section: Müzik Türleri & Ruh Halleri -->
+                <div class="section-header">
+                    <h3 class="section-title">🎸 Müzik Türleri & Ruh Halleri</h3>
+                </div>
+                <div id="genres-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:16px; margin-bottom:40px;"></div>
+
+            </section>
+
+            <!-- VIEW 2: Radio Stations -->
+            <section id="view-radios" class="view-section">
+                <div class="section-header">
+                    <h3 class="section-title">📻 7/24 Canlı Radyo İstasyonları</h3>
+                </div>
+                <div id="radios-grid" class="radios-grid"></div>
+            </section>
+
+            <!-- VIEW 3: Search Results -->
+            <section id="view-search" class="view-section">
+                <div class="section-header">
+                    <h3 id="search-view-title" class="section-title">Arama Sonuçları</h3>
+                </div>
+                <table class="track-list-table">
+                    <tbody id="search-results-tbody"></tbody>
+                </table>
+            </section>
+
+            <!-- VIEW 4: Liked Songs -->
+            <section id="view-likes" class="view-section">
+                <div class="hero-featured" style="background:linear-gradient(135deg, rgba(236,72,153,0.3) 0%, rgba(99,102,241,0.3) 100%); margin-bottom:24px;">
+                    <div style="width:120px; height:120px; border-radius:14px; background:var(--accent-gradient); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(236,72,153,0.4);">
+                        <svg width="54" height="54" viewBox="0 0 24 24" fill="#fff"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    </div>
+                    <div>
+                        <span style="font-size:11px; text-transform:uppercase; font-weight:800; color:#f43f5e;">Otomatik Çalma Listesi</span>
+                        <h2 style="font-size:28px; font-weight:900;">Beğenilen Şarkılar</h2>
+                        <p id="likes-count-label" style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">0 Şarkı</p>
+                        <button class="btn btn-primary" onclick="App.playAllLikes()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span>Tümünü Çal</span>
+                        </button>
+                    </div>
+                </div>
+                <table class="track-list-table">
+                    <tbody id="likes-tbody"></tbody>
+                </table>
+            </section>
+
+            <!-- VIEW 5: Playlist Detail -->
+            <section id="view-playlist" class="view-section">
+                <div class="hero-featured" style="margin-bottom:24px;">
+                    <div style="width:120px; height:120px; border-radius:14px; background:var(--bg-input); border:1px solid var(--border-glow); display:flex; align-items:center; justify-content:center;">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    </div>
+                    <div>
+                        <span style="font-size:11px; text-transform:uppercase; font-weight:800; color:var(--accent-primary);">Özel Çalma Listesi</span>
+                        <h2 id="playlist-view-title" style="font-size:28px; font-weight:900;">Çalma Listesi</h2>
+                        <p id="playlist-count-label" style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">0 Şarkı</p>
+                        <button class="btn btn-primary" onclick="App.playAllCurrentPlaylist()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span>Tümünü Çal</span>
+                        </button>
+                    </div>
+                </div>
+                <table class="track-list-table">
+                    <tbody id="playlist-tbody"></tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- 3. Bottom Sticky Audio Player Bar -->
+    <div class="player-bar">
+        
+        <!-- Player Left: Track Details -->
+        <div class="player-track-info">
+            <div id="player-thumb-wrap" class="player-thumb-wrap" title="Büyük Ekranda / Sinema Modunda Aç">
+                <img id="player-thumb" class="player-thumb" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=200&auto=format&fit=crop&q=80" alt="Cover">
+                <div class="thumb-expand-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                </div>
+            </div>
+            <div class="player-meta">
+                <div id="player-title" class="player-title" title="Büyük Ekranda Aç">Bir şarkı seçin</div>
+                <div id="player-artist" class="player-artist">SoundWave Pro</div>
+            </div>
+            <div class="player-actions">
+                <button id="player-like-btn" class="player-icon-btn" title="Beğen">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </button>
+                <button id="player-download-btn" class="player-icon-btn" title="320kbps MP3 İndir">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Player Center: Controls & Seekbar -->
+        <div class="player-center">
+            <div class="player-controls">
+                <button id="btn-shuffle" class="player-icon-btn" title="Karışık Çal">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+                </button>
+                <button id="btn-prev" class="player-icon-btn" title="Önceki">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+                </button>
+                <button id="btn-play-pause" class="btn-play-pause" title="Oynat / Duraklat">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </button>
+                <button id="btn-next" class="player-icon-btn" title="Sonraki">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+                </button>
+                <button id="btn-loop" class="player-icon-btn" title="Tekrar Çal">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                </button>
+            </div>
+
+            <div class="progress-container">
+                <span id="time-current" class="time-label">0:00</span>
+                <div id="seekbar-wrap" class="seekbar-wrap">
+                    <div id="seekbar-progress" class="seekbar-progress"></div>
+                </div>
+                <span id="time-duration" class="time-label">0:00</span>
+            </div>
+        </div>
+
+        <!-- Player Right: Equalizer & Volume -->
+        <div class="player-right">
+            <div id="equalizer-anim" class="equalizer-anim" title="Sinema Modunu Aç">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <div id="volume-slider-wrap" class="volume-slider-wrap">
+                <div id="volume-slider-bar" class="volume-slider-bar"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 4. Cinema Mode / Now Playing Fullscreen Visualizer Overlay -->
+    <div id="cinema-overlay" class="cinema-overlay">
+        <div class="cinema-topbar">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:12px; font-weight:800; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:1px;">SOUNDWAVE SINEMA MODU</span>
+            </div>
+            <button onclick="App.closeCinema()" class="player-icon-btn" style="font-size:22px; width:38px; height:38px; color:#fff;" title="Kapat (ESC)">&times;</button>
+        </div>
+
+        <div class="cinema-body">
+            <!-- Left: Artwork & Real-Time Bass Visualizer Halo -->
+            <div class="cinema-cover-section">
+                <div class="bass-halo-wrap">
+                    <div id="bass-halo-ring" class="bass-halo-ring"></div>
+                    <img id="cinema-cover-img" class="cinema-cover-img" src="" alt="Cinema Cover">
+                </div>
+
+                <h2 id="cinema-title" style="font-size:22px; font-weight:900; margin-bottom:4px;">Parça Adı</h2>
+                <p id="cinema-artist" style="font-size:14px; color:var(--text-muted); margin-bottom:12px;">Sanatçı</p>
+                
+                <canvas id="visualizer-canvas" class="visualizer-canvas" width="300" height="50"></canvas>
+            </div>
+
+            <!-- Right: Lyrics & Video Clip Switcher -->
+            <div class="cinema-right-panel">
+                <div class="mode-toggle-bar">
+                    <button id="mode-btn-lyrics" class="mode-btn active" onclick="App.switchCinemaMode('lyrics')">📜 Şarkı Sözleri</button>
+                    <button id="mode-btn-video" class="mode-btn" onclick="App.switchCinemaMode('video')">🎬 Video Klip</button>
+                </div>
+
+                <div id="lyrics-container" class="lyrics-container">
+                    Şarkı sözleri yükleniyor...
+                </div>
+
+                <div id="video-container" class="video-container">
+                    <!-- YouTube video iframe loaded on-the-fly -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Add to Playlist Selector Modal -->
+    <div id="playlist-select-modal" class="modal-backdrop" onclick="if(event.target===this) App.closeAddToPlaylistModal()">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+                <h3 style="font-size:17px; font-weight:800; color:#fff;">Çalma Listesine Ekle</h3>
+                <button onclick="App.closeAddToPlaylistModal()" style="background:transparent; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+
+            <div id="modal-playlists-list" style="max-height:200px; overflow-y:auto; margin-bottom:16px;"></div>
+
+            <div style="border-top:1px solid var(--border-color); padding-top:14px;">
+                <label class="form-label">Veya Yeni Liste Oluştur:</label>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="new-playlist-input" class="form-input" placeholder="Yeni liste adı...">
+                    <button class="btn btn-primary" onclick="App.createPlaylistFromModal()" style="white-space:nowrap;">Oluştur & Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Auth Modal (Login / Register) -->
+    <div id="auth-modal" class="modal-backdrop" onclick="if(event.target===this) Auth.closeAuthModal()">
+        <div class="modal-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 id="auth-modal-title" style="font-size:18px; font-weight:800; color:#fff;">Hesap Girişi</h3>
+                <button onclick="Auth.closeAuthModal()" style="background:transparent; border:none; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+
+            <form id="auth-form">
+                <div class="form-group">
+                    <label class="form-label" for="auth-username">Kullanıcı Adı:</label>
+                    <input type="text" id="auth-username" class="form-input" required placeholder="kullanici_adi" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="auth-password">Şifre:</label>
+                    <input type="password" id="auth-password" class="form-input" required placeholder="••••••••" autocomplete="current-password">
+                </div>
+
+                <div id="auth-error" style="color:#ef4444; font-size:13px; margin-bottom:14px; display:none;"></div>
+
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; margin-top:8px;">Giriş Yap</button>
+            </form>
+
+            <div id="auth-switch-text" style="text-align:center; font-size:13px; color:var(--text-muted); margin-top:16px;"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
