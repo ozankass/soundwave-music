@@ -415,7 +415,7 @@ const App = {
     // -------------------------------------------------------------
     async loadSmartMixes() {
         try {
-            const headers = Auth.token ? { "Authorization": `Bearer ${Auth.token}` } : {};
+            const headers = (typeof Auth !== "undefined" && Auth.token) ? { "Authorization": `Bearer ${Auth.token}` } : {};
             const resp = await fetch(`${API_BASE}/api/smart-mixes`, { headers });
             const data = await resp.json();
             const grid = document.getElementById("smart-mixes-grid");
