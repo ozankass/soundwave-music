@@ -229,6 +229,10 @@ const Auth = {
     }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+        Auth.init();
+    });
+} else {
     Auth.init();
-});
+}
